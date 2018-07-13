@@ -2,7 +2,7 @@
   "name": "vscode-sleet",
   "displayName": "vscode-sleet",
   "description": "Sleet for VS Code",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "publisher": "jacokoo",
   "repository": "https://github.com/JacoKoo/atom-sleet.git",
   "engines": {
