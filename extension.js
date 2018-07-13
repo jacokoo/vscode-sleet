@@ -52,6 +52,7 @@ let doCompile = (document, force) => {
 
 function activate(context) {
     context.subscriptions.push(workspace.onDidChangeTextDocument((e) => {
+        if (e.document.languageId !== 'sleet') return;
         compileIt(e.document.getText(), e.document.fileName);
     }));
     context.subscriptions.push(workspace.onDidSaveTextDocument((e) => {
