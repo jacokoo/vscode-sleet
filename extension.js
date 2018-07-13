@@ -29,7 +29,13 @@ const getPackageConfig = (file) => {
 const compileIt = (content, file) => {
     const options = getPackageConfig(file) || {};
     options.filename = file;
-    return compile(content, options);
+    try {
+        return compile(content, options);
+    } catch (e) {
+        window.setStatusBarMessage(e.message, 10000)
+        window.showErrorMessage(e.message)
+        throw e
+    }
 };
 
 let doCompile = (document, force) => {
@@ -46,7 +52,10 @@ let doCompile = (document, force) => {
 
 function activate(context) {
     context.subscriptions.push(workspace.onDidChangeTextDocument((e) => {
-        doCompile(e.document);
+        compileIt(e.document.getText(), e.document.fileName);
+    }));
+    context.subscriptions.push(workspace.onDidSaveTextDocument((e) => {
+        doCompile(e);
     }));
 
     let disposable = commands.registerCommand('extension.sleet.compile', () => {
