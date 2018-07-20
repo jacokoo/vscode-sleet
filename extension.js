@@ -26,14 +26,23 @@ const getPackageConfig = (file) => {
     }
     return null;
 };
-const compileIt = (content, file) => {
+let statusMessageDispose = false
+const compileIt = (content, file, compileOnly) => {
     const options = getPackageConfig(file) || {};
     options.filename = file;
     try {
-        return compile(content, options);
+        const o = compile(content, options);
+        if (statusMessageDispose) {
+            statusMessageDispose.dispose()
+            statusMessageDispose = false
+        }
+        return o
     } catch (e) {
-        window.setStatusBarMessage(e.message, 10000)
-        window.showErrorMessage(e.message)
+        if (statusMessageDispose) statusMessageDispose.dispose()
+        statusMessageDispose = window.setStatusBarMessage(e.message, 10000)
+        if (!compileOnly) {
+            window.showErrorMessage(e.message)
+        }
         throw e
     }
 };
@@ -53,7 +62,7 @@ let doCompile = (document, force) => {
 function activate(context) {
     context.subscriptions.push(workspace.onDidChangeTextDocument((e) => {
         if (e.document.languageId !== 'sleet') return;
-        compileIt(e.document.getText(), e.document.fileName);
+        compileIt(e.document.getText(), e.document.fileName, true);
     }));
     context.subscriptions.push(workspace.onDidSaveTextDocument((e) => {
         doCompile(e);
