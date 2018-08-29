@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
     <key>scopeName</key>
@@ -9,124 +9,33 @@
     <key>fileTypes</key>
     <array>
         <string>sleet</string>
+        <string>st</string>
     </array>
     <key>patterns</key>
     <array>
         <dict>
+            <key>match</key>
+            <string>#!.*</string>
             <key>name</key>
             <string>comment.line.shebang.sleet</string>
-            <key>match</key>
-            <string>^#!\s*(.*)$</string>
-        </dict>
-        <dict>
-            <key>begin</key>
-            <string>^(\s*)#\.\s*$</string>
-            <key>end</key>
-            <string>^(?!\1\s+|$)</string>
-            <key>name</key>
-            <string>comment.block.sleet</string>
-        </dict>
-        <dict>
-            <key>match</key>
-            <string>^\s*#\s+(.*)$</string>
-            <key>name</key>
-            <string>comment.line.sleet</string>
-        </dict>
-        <dict>
-            <key>begin</key>
-            <string>^(\s*)\|\.\s*$</string>
-            <key>end</key>
-            <string>^(?!\1\s+|$)</string>
-            <key>comment</key>
-            <string>pipeline text block</string>
-            <key>beginCaptures</key>
-            <dict>
-                <key>0</key>
-                <dict>
-                    <key>name</key>
-                    <string>entity.name.tag.sleet</string>
-                </dict>
-            </dict>
-        </dict>
-        <dict>
-            <key>match</key>
-            <string>^(\s*)\|\s+.*$</string>
-            <key>comment</key>
-            <string>pipeline text</string>
         </dict>
         <dict>
             <key>include</key>
-            <string>#script</string>
+            <string>#comment</string>
         </dict>
         <dict>
             <key>include</key>
-            <string>#style</string>
-        </dict>
-        <dict>
-            <key>begin</key>
-            <string>^(\s*)([\w$@_-]*)(([.#][\w$@_-]*)*)(?=.*\s*\.\s*$)</string>
-            <key>beginCaptures</key>
-            <dict>
-                <key>2</key>
-                <dict>
-                    <key>name</key>
-                    <string>entity.name.tag.sleet</string>
-                </dict>
-                <key>3</key>
-                <dict>
-                    <key>name</key>
-                    <string>entity.other.attribute-name.sleet</string>
-                </dict>
-            </dict>
-            <key>end</key>
-            <string>^(?!(\1\s)|\s*$)</string>
-            <key>patterns</key>
-            <array>
-                <dict>
-                    <key>include</key>
-                    <string>#line-end-with-dot</string>
-                </dict>
-            </array>
-        </dict>
-        <dict>
-            <key>include</key>
-            <string>#tag</key>
-        </dict>
-        <dict>
-            <key>include</key>
-            <string>#attribute</key>
-        </dict>
-        <dict>
-            <key>match</key>
-            <string>(?<=\S)\s+.*$</string>
-            <key>comment</key>
-            <string>inline text</string>
+            <string>#tag</string>
         </dict>
     </array>
     <key>repository</key>
     <dict>
-        <key>line-end-with-dot</key>
-        <dict>
-            <key>begin</key>
-            <string>\G</string>
-            <key>end</key>
-            <string>\.\s*$</string>
-            <key>patterns</key>
-            <array>
-                <dict>
-                    <key>include</key>
-                    <string>#tag</string>
-                </dict>
-                <dict>
-                    <key>include</key>
-                    <string>#attribute</string>
-                </dict>
-            </array>
-        </dict>
         <key>tag</key>
         <dict>
-            <key>match</key>
-            <string>(^\s*|\s*[:<>+]\s*)([\w$@_-]*)(([.#][\w$@_-]+)*)</string>
+            <key>begin</key>
+            <string>^(\s*)(@?[\w$_-]*)(([.#]@?[\w$_-]+)*)</string>
+            <key>end</key>
+            <string>^(?!\1\s+|$)</string>
             <key>captures</key>
             <dict>
                 <key>2</key>
@@ -140,72 +49,493 @@
                     <string>entity.other.attribute-name.sleet</string>
                 </dict>
             </dict>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#dynamic_text</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#one_dot</string>
+                </dict>
+            </array>
         </dict>
-        <key>attribute</key>
+        <key>tag2</key>
         <dict>
             <key>begin</key>
-            <string>(&\w+)?\(</string>
-            <key>beginCaptures</key>
+            <string>^(\s*)(@?[\w$_-]*)(([.#]@?[\w$_-]+)*)(?=.*\s*\.\.\s*$)</string>
+            <key>end</key>
+            <string>^(?!\1|$)</string>
+            <key>captures</key>
             <dict>
-                <key>0</key>
+                <key>2</key>
                 <dict>
                     <key>name</key>
-                    <string>punctuation.definition.attribute.start.sleet</string>
+                    <string>entity.name.tag.sleet</string>
                 </dict>
-                <key>1</key>
+                <key>3</key>
                 <dict>
                     <key>name</key>
                     <string>entity.other.attribute-name.sleet</string>
-                </dict>
-            </dict>
-            <key>end</key>
-            <string>\)</string>
-            <key>endCaptures</key>
-            <dict>
-                <key>0</key>
-                <dict>
-                    <key>name</key>
-                    <string>punctuation.definition.attribute.start.sleet</string>
                 </dict>
             </dict>
             <key>patterns</key>
             <array>
                 <dict>
-                    <key>match</key>
-                    <string>'[^']*'|"[^"]*"</string>
-                    <key>name</key>
-                    <string>string.quoted.sleet</string>
+                    <key>include</key>
+                    <string>#dynamic_text</string>
                 </dict>
                 <dict>
-                    <key>match</key>
-                    <string>[=+]</string>
-                    <key>name</key>
-                    <string>punctuation.definition.attribute.start.sleet</string>
+                    <key>include</key>
+                    <string>#two_dot</string>
                 </dict>
+            </array>
+        </dict>
+        <key>inline_tag</key>
+        <dict>
+            <key>match</key>
+            <string>([:&gt;+])\s*(@?[\w$_-]*)(([.#][\w$@_-]+)*)</string>
+            <key>captures</key>
+            <dict>
+                <key>1</key>
                 <dict>
-                    <key>match</key>
-                    <string>\b[0-9]+\b</string>
                     <key>name</key>
-                    <string>constant.numeric.sleet</string>
+                    <string>keyword.control.sleet</string>
                 </dict>
+                <key>2</key>
                 <dict>
-                    <key>match</key>
-                    <string>\b(true|false)\b</string>
                     <key>name</key>
-                    <string>constant.language.boolean.sleet</string>
+                    <string>entity.name.tag.sleet</string>
                 </dict>
+                <key>3</key>
                 <dict>
-                    <key>match</key>
-                    <string>[^\s()'"=+]+</string>
                     <key>name</key>
                     <string>entity.other.attribute-name.sleet</string>
                 </dict>
+            </dict>
+        </dict>
+        <key>tag_extra</key>
+        <dict>
+            <key>match</key>
+            <string>(?&lt;=\S)([@|&amp;](?:[\w$@_-]*))(?=\S|$)</string>
+            <key>name</key>
+            <string>keyword.control.sleet</string>
+        </dict>
+        <key>one_dot</key>
+        <dict>
+            <key>begin</key>
+            <string>\G</string>
+            <key>end</key>
+            <string>\.\s*$</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#comment_block2</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#comment</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#script2</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#script</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#style2</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#style</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#attribute</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#tag2</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#tag</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#inline_tag</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#tag_extra</string>
+                </dict>
             </array>
+        </dict>
+        <key>two_dot</key>
+        <dict>
+            <key>begin</key>
+            <string>\G</string>
+            <key>end</key>
+            <string>\.\.\s*$</string>
+        </dict>
+        <key>dynamic_text</key>
+        <dict>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#text_helper</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#text_identifier</string>
+                </dict>
+            </array>
+        </dict>
+        <key>text_identifier</key>
+        <dict>
+            <key>match</key>
+            <string>(?&lt;!\\)\$(@?[\.\w$_-]*)</string>
+            <key>name</key>
+            <string>entity.name.function.sleet</string>
+        </dict>
+        <key>text_helper</key>
+        <dict>
+            <key>begin</key>
+            <string>(?&lt;!\\)(\$)(?=[^\.]*\()</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>1</key>
+                <dict>
+                    <key>name</key>
+                    <string>entity.name.function.sleet</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>(?&lt;=\))</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#helper</string>
+                </dict>
+            </array>
+        </dict>
+        <key>attribute</key>
+        <dict>
+            <key>begin</key>
+            <string>\(</string>
+            <key>beginCaptures</key>
+            <array>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.attribute.start.sleet</string>
+                </dict>
+            </array>
+            <key>end</key>
+            <string>\)</string>
+            <key>endCaptures</key>
+            <array>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.attribute.start.sleet</string>
+                </dict>
+            </array>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#attribute_key</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#attribute_value</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>(\w*)\:(?=\S)</string>
+                    <key>captures</key>
+                    <dict>
+                        <key>1</key>
+                        <dict>
+                            <key>name</key>
+                            <string>keyword.control.sleet</string>
+                        </dict>
+                    </dict>
+                </dict>
+            </array>
+        </dict>
+        <key>attribute_value</key>
+        <dict>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#helper</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#normal_value</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>\+</string>
+                    <key>name</key>
+                    <string>keyword.control.sleet</string>
+                </dict>
+            </array>
+        </dict>
+        <key>attribute_key</key>
+        <dict>
+            <key>match</key>
+            <string>\s*([\w$@_-]*)\s*(=)</string>
+            <key>captures</key>
+            <dict>
+                <key>1</key>
+                <dict>
+                    <key>name</key>
+                    <string>entity.other.attribute-name.sleet</string>
+                </dict>
+                <key>2</key>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.attribute.equals.sleet</string>
+                </dict>
+            </dict>
+        </dict>
+        <key>helper</key>
+        <dict>
+            <key>begin</key>
+            <string>(\w*)\s*\(</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>1</key>
+                <dict>
+                    <key>name</key>
+                    <string>entity.name.function.sleet</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>\)</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>match</key>
+                    <string>\s*\|\s*</string>
+                    <key>name</key>
+                    <string>keyword.control.sleet</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#attribute_key</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#attribute_value</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>,</string>
+                </dict>
+            </array>
+        </dict>
+        <key>normal_value</key>
+        <dict>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#string</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#unquoted</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#constant</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#number</string>
+                </dict>
+            </array>
+        </dict>
+        <key>constant</key>
+        <dict>
+            <key>match</key>
+            <string>\b(true|false|null)\b</string>
+            <key>name</key>
+            <string>constant.language.sleet</string>
+        </dict>
+        <key>number</key>
+        <dict>
+            <key>match</key>
+            <string>-?(?=[1-9]|0(?!\d))\d+(\.\d+)?([eE][+-]?\d+)?</string>
+            <key>name</key>
+            <string>constant.numeric.sleet</string>
+        </dict>
+        <key>string</key>
+        <dict>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#single_string</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#double_string</string>
+                </dict>
+            </array>
+        </dict>
+        <key>unquoted</key>
+        <dict>
+            <key>match</key>
+            <string>([\.\w$@_-]+)(?=(\s|\)|,))</string>
+            <key>name</key>
+            <string>support.type.variable.sleet</string>
+        </dict>
+        <key>single_string</key>
+        <dict>
+            <key>begin</key>
+            <string>'</string>
+            <key>beginCaptures</key>
+            <array>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.string.begin.sleet</string>
+                </dict>
+            </array>
+            <key>end</key>
+            <string>'</string>
+            <key>endCaptures</key>
+            <array>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.string.end.json</string>
+                </dict>
+            </array>
+            <key>name</key>
+            <string>string.quoted.single.sleet</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>match</key>
+                    <string>(?x)
+                        \\ # a literal backslash
+                        ( # followed by
+                        ['\\/bfnrt] # one of these characters
+                        | # or
+                        u[0-9a-fA-F]{4} # a u and four hex digits
+                        )</string>
+                    <key>name</key>
+                    <string>constant.character.escape.json</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>\\.</string>
+                    <key>name</key>
+                    <string>invalid.illegal.unrecognized-string-escape.json</string>
+                </dict>
+            </array>
+        </dict>
+        <key>double_string</key>
+        <dict>
+            <key>begin</key>
+            <string>"</string>
+            <key>beginCaptures</key>
+            <array>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.string.begin.sleet</string>
+                </dict>
+            </array>
+            <key>end</key>
+            <string>"</string>
+            <key>endCaptures</key>
+            <array>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.string.end.json</string>
+                </dict>
+            </array>
+            <key>name</key>
+            <string>string.quoted.double.sleet</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>match</key>
+                    <string>(?x)
+                        \\ # a literal backslash
+                        ( # followed by
+                        ["\\/bfnrt] # one of these characters
+                        | # or
+                        u[0-9a-fA-F]{4} # a u and four hex digits
+                        )</string>
+                    <key>name</key>
+                    <string>constant.character.escape.json</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>\\.</string>
+                    <key>name</key>
+                    <string>invalid.illegal.unrecognized-string-escape.json</string>
+                </dict>
+            </array>
+        </dict>
+        <key>comment</key>
+        <dict>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#comment_line</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#comment_block</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>comment_block2</string>
+                </dict>
+            </array>
+        </dict>
+        <key>comment_line</key>
+        <dict>
+            <key>match</key>
+            <string>^\s*#\s+.*</string>
+            <key>name</key>
+            <string>comment.line.sleet</string>
+        </dict>
+        <key>comment_block</key>
+        <dict>
+            <key>begin</key>
+            <string>^(\s*)#\.\s*$</string>
+            <key>end</key>
+            <string>^(?!\1\s+|$)</string>
+            <key>name</key>
+            <string>comment.block.sleet</string>
+        </dict>
+        <key>comment_block2</key>
+        <dict>
+            <key>begin</key>
+            <string>^(\s*)#\.\.\s*$</string>
+            <key>end</key>
+            <string>^(?!\1|$)</string>
+            <key>name</key>
+            <string>comment.block.sleet</string>
         </dict>
         <key>script</key>
         <dict>
             <key>begin</key>
-            <string>(\s*)(script)(?=.*\.\s*$)</string>
+            <string>(\s*).*(script)(?=.*\.\s*$)</string>
             <key>beginCaptures</key>
             <dict>
                 <key>2</key>
@@ -220,7 +550,33 @@
             <array>
                 <dict>
                     <key>include</key>
-                    <string>#line-end-with-dot</string>
+                    <string>#one_dot</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>source.js</string>
+                </dict>
+            </array>
+        </dict>
+        <key>script2</key>
+        <dict>
+            <key>begin</key>
+            <string>(\s*).*(script)(?=.*\.\.\s*$)</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>2</key>
+                <dict>
+                    <key>name</key>
+                    <string>entity.name.tag.sleet</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>^(?!\1|$)</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#one_dot</string>
                 </dict>
                 <dict>
                     <key>include</key>
@@ -246,7 +602,33 @@
             <array>
                 <dict>
                     <key>include</key>
-                    <string>#line-end-with-dot</string>
+                    <string>#one_dot</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>source.css</string>
+                </dict>
+            </array>
+        </dict>
+        <key>style2</key>
+        <dict>
+            <key>begin</key>
+            <string>(\s*)(style)(?=.*\.\.\s*$)</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>2</key>
+                <dict>
+                    <key>name</key>
+                    <string>entity.name.tag.sleet</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>^(?!\1|$)</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#one_dot</string>
                 </dict>
                 <dict>
                     <key>include</key>
