@@ -293,7 +293,7 @@
         <key>attribute_key</key>
         <dict>
             <key>match</key>
-            <string>\s*([\w$@_-]*)\s*(=)</string>
+            <string>\s*([\w$@_-]*)\s*(=)(?!=)</string>
             <key>captures</key>
             <dict>
                 <key>1</key>
@@ -397,7 +397,7 @@
         <key>unquoted</key>
         <dict>
             <key>match</key>
-            <string>([\.\w$@_-]+)(?=(\s|\)|,))</string>
+            <string>([\./\w$@_-]+)(?=(\s|\)|,))</string>
             <key>name</key>
             <string>support.type.variable.sleet</string>
         </dict>
